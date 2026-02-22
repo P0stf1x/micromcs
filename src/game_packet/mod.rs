@@ -1,8 +1,9 @@
 use tracing::warn;
 
-use crate::{network_handler::Connection, packed_data::PackedData};
+use crate::{game_packet::clientbound::ServerResponse, network_handler::Connection, packed_data::PackedData};
 
 pub mod serverbound;
+pub mod clientbound;
 
 pub fn get_game_packet<'a>(state: crate::network_handler::ConnectionState, packet_id: i32, data: Vec<u8>) -> Box<dyn GamePacket<'a>> {
     let data_stream = PackedData {
@@ -31,5 +32,5 @@ pub trait GamePacket<'a> {
 
     fn update_connection(&self, _conn: *mut Connection) {}
 
-    fn respond<'b>(&self, _send_response: Box<dyn FnMut(i32, Vec<u8>) + 'b>) {}
+    fn respond<'b>(&self, _send_response: Box<dyn FnMut(ServerResponse) + 'b>) {}
 }

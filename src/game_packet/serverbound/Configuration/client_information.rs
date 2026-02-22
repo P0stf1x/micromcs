@@ -1,5 +1,6 @@
 use tracing::{debug, trace};
 
+use crate::game_packet::clientbound::ServerResponse;
 use crate::packed_data::PackedDataIterator;
 use crate::game_packet::GamePacket;
 
@@ -78,7 +79,7 @@ impl<'a> GamePacket<'a> for ClientInformationPacket {
         trace!("Particle status: {:?}", self.particle_status);
     }
 
-    fn respond<'b>(&self, mut send_data: Box<dyn FnMut(i32, Vec<u8>) + 'b>) {
+    fn respond<'b>(&self, mut send_data: Box<dyn FnMut(ServerResponse) + 'b>) {
         unimplemented!()
     }
 }

@@ -1,6 +1,6 @@
 use tracing::debug;
 
-use crate::game_packet::GamePacket;
+use crate::game_packet::{GamePacket, clientbound::ServerResponse};
 
 pub struct AcknowledgeFinishPacket {}
 
@@ -21,7 +21,7 @@ impl<'a> GamePacket<'a> for AcknowledgeFinishPacket {
         }
     }
 
-    fn respond<'b>(&self, mut send_response: Box<dyn FnMut(i32, Vec<u8>) + 'b>) {
+    fn respond<'b>(&self, mut send_response: Box<dyn FnMut(ServerResponse) + 'b>) {
         unimplemented!()
     }
 }

@@ -1,6 +1,6 @@
 use tracing::{debug, trace};
 
-use crate::types;
+use crate::game_packet::clientbound::{self, ServerResponse};
 use crate::packed_data::PackedDataIterator;
 use crate::game_packet::GamePacket;
 
@@ -25,7 +25,9 @@ impl<'a> GamePacket<'a> for PingPacket {
         trace!("Timestamp: {}", self.timestamp);
     }
 
-    fn respond<'b>(&self, mut send_data: Box<dyn FnMut(i32, Vec<u8>) + 'b>) {
-        send_data(0x01, types::Long::new(self.timestamp).write());
+    fn respond<'b>(&self, mut send_data: Box<dyn FnMut(ServerResponse) + 'b>) {
+        let response = clientbound::Status::PongPacket::new(self.timestamp).send();
+
+        send_data(response);
     }
 }

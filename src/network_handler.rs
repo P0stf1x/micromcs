@@ -2,7 +2,7 @@ use std::{io::{Read, Write}, net::TcpStream};
 
 use tracing::{debug, info, trace};
 
-use crate::types;
+use crate::{game_packet::clientbound::ServerResponse, types};
 use crate::network_packet::NetworkPacket;
 
 #[derive(Debug, Clone, Copy)]
@@ -47,13 +47,13 @@ impl Connection {
         self.state = new_state;
     }
 
-    fn send_data_callback<'a>(&'a mut self) -> Box<dyn FnMut(i32, Vec<u8>) + 'a> {
-        Box::new(|packet_id: i32, data: Vec<u8>| {
-            let packet_id_varint = types::VarInt::new(packet_id).write();
-            let data_length = types::VarInt::new((packet_id_varint.len() + data.len()) as i32).write();
+    fn send_data_callback<'a>(&'a mut self) -> Box<dyn FnMut(ServerResponse) + 'a> {
+        Box::new(|response: ServerResponse| {
+            let packet_id_varint = types::VarInt::new(response.id).write();
+            let data_length = types::VarInt::new((packet_id_varint.len() + response.data.len()) as i32).write();
             self.stream.write_all(&data_length).unwrap();
             self.stream.write_all(&packet_id_varint).unwrap();
-            self.stream.write_all(&data).unwrap();
+            self.stream.write_all(&response.data).unwrap();
             // TODO: handle errors
         })
     }

@@ -1,5 +1,6 @@
 use tracing::{debug, trace};
 
+use crate::game_packet::clientbound::ServerResponse;
 use crate::packed_data::PackedDataIterator;
 use crate::game_packet::GamePacket;
 
@@ -26,7 +27,7 @@ impl<'a> GamePacket<'a> for KnownPacksPacket {
         // FIXME: we don't store known packs for now, so it's logged in new() function
     }
 
-    fn respond<'b>(&self, mut send_data: Box<dyn FnMut(i32, Vec<u8>) + 'b>) {
+    fn respond<'b>(&self, mut send_data: Box<dyn FnMut(ServerResponse) + 'b>) {
         unimplemented!()
     }
 }
