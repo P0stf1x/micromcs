@@ -23,7 +23,7 @@ impl CustomPayloadPacket {
 
 impl<'a> GamePacket<'a> for CustomPayloadPacket {
     fn log(&self) {
-        debug!("Recieved Client Information packet");
+        debug!("Recieved Custom Payload packet");
         trace!("Custom payload ({}):\n{:02X?}", self.identifier.as_string(), self.data);
         // TODO: I think the best way of doing this would be to create a dictionary of namespaces, and each can register and provide handler
     }
