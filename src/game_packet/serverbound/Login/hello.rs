@@ -1,8 +1,9 @@
 use tracing::{debug, trace};
 
-use crate::game_packet::clientbound::ServerResponse;
+use crate::game_packet::clientbound::{self, ServerResponse};
 use crate::packed_data::PackedDataIterator;
 use crate::game_packet::GamePacket;
+use crate::types;
 
 pub struct HelloPacket {
     player_name: String,
@@ -31,6 +32,10 @@ impl<'a> GamePacket<'a> for HelloPacket {
     }
 
     fn respond<'b>(&self, mut send_data: Box<dyn FnMut(ServerResponse) + 'b>) {
-        unimplemented!();
+        // TODO: implement encryption and compression
+
+        let response = clientbound::Login::LoginFinishedPacket::new(types::UUID::new(self.uuid)).send();
+
+        send_data(response);
     }
 }

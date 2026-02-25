@@ -1,3 +1,4 @@
+#[derive(Clone, Copy)]
 pub struct UUID {
     data: u128,
 }
@@ -65,5 +66,13 @@ impl UUID {
 
     pub fn len(&self) -> usize {
         16
+    }
+
+    pub fn format(&self) -> String {
+        let hex = format!("{:02x}", self.data);
+        let result = format!(
+            "{}-{}-{}-{}-{}", &hex[0..8], &hex[8..12], &hex[12..16], &hex[16..20], &hex[20..]
+        );
+        return result;
     }
 }

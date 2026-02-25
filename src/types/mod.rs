@@ -24,3 +24,6 @@ pub use byte::Byte;
 
 mod unsigned_byte;
 pub use unsigned_byte::UnsignedByte;
+
+mod game_profile;
+pub use game_profile::GameProfile;
